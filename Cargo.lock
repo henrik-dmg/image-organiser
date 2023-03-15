@@ -163,6 +163,7 @@ dependencies = [
  "env_logger",
  "indicatif",
  "log",
+ "serde",
 ]
 
 [[package]]
@@ -328,6 +329,12 @@ dependencies = [
  "linux-raw-sys",
  "windows-sys 0.45.0",
 ]
+
+[[package]]
+name = "serde"
+version = "1.0.156"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "314b5b092c0ade17c00142951e50ced110ec27cea304b1037c6969246c2469a4"
 
 [[package]]
 name = "strsim"
