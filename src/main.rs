@@ -31,7 +31,7 @@ impl ImageOrganiser for DefaultImageOrganiser {
         &self,
         configuration: Configuration,
     ) -> Result<(), Box<dyn std::error::Error>> {
-        println!("Hello, world!");
+        println!("Hello, world! {:?}", configuration);
         Ok(())
     }
 }

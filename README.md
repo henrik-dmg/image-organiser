@@ -12,3 +12,7 @@ image-organiser <configuration_file>
 ## Configuration
 
 TODO
+
+## Progress
+
+10% at most. I just started playing around with Rust and I have very little idea what I'm doing.
