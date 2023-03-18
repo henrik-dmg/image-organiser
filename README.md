@@ -1,5 +1,7 @@
 # image-organiser
 
+> Currently a work in progress, no files are actually copied or moved yet. If you want to use the tool, you'll have to build it yourself.
+
 This is a simple tool I'm writing mainly for my own purposes. It organises files from my camera's SD card into folders based on the date the photo was taken. It also renames the files to a more sensible format.
 Initially I used Swift because that's what I'm most familiar with, but I'm now rewriting it in Rust since it's all the rage now and I've been meaning to try it for a while.
 
