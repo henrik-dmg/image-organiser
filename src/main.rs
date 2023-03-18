@@ -1,53 +1,82 @@
+use std::path::PathBuf;
+use std::process::exit;
+use std::{fs, thread::current};
+
 use anyhow::{Context, Result};
+use chrono::{DateTime, Utc};
 use clap::Parser;
-use serde::Deserialize;
-use std::io;
+use glob::glob;
 
-#[derive(Debug, Parser)]
-struct CIArguments {
-    configuration_path: std::path::PathBuf,
-    #[clap(flatten)]
-    verbose: clap_verbosity_flag::Verbosity,
-}
+mod cli_configuration;
 
-#[derive(Deserialize, Debug)]
-#[serde(rename_all = "camelCase")]
-struct Configuration {
-    target_directory: String,
-    source_directory: String,
-}
+fn parse_configuration() -> cli_configuration::CommandConfiguration {
+    let cli = cli_configuration::CLI::parse();
 
-trait ImageOrganiser {
-    fn run_with_configuration_file(
-        &self,
-        configuration: Configuration,
-    ) -> Result<(), Box<dyn std::error::Error>>;
-}
+    let mut configuration = match cli.action {
+        cli_configuration::FileAction::Copy(configuration) => configuration,
+        cli_configuration::FileAction::Move(configuration) => configuration,
+    };
 
-struct DefaultImageOrganiser;
-
-impl ImageOrganiser for DefaultImageOrganiser {
-    fn run_with_configuration_file(
-        &self,
-        configuration: Configuration,
-    ) -> Result<(), Box<dyn std::error::Error>> {
-        println!("Hello, world! {:?}", configuration);
-        Ok(())
+    if configuration.source_directory.is_none() {
+        match std::env::current_dir() {
+            Ok(path) => configuration.source_directory = Some(path),
+            Err(_) => {
+                eprintln!("Source directory not specified and could not get current dir");
+                exit(1);
+            }
+        }
     }
+
+    configuration
 }
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    env_logger::init();
-    let stdout = io::stdout(); // get the global stdout entity
-    let mut handle = io::BufWriter::new(stdout); // optional: wrap that handle in a buffer
+fn main() -> Result<()> {
+    let config = parse_configuration();
 
-    let args = CIArguments::parse(); // parse CLI arguments
-    let configuration_file_path = args.configuration_path.to_str().unwrap(); // unwrap configuration file path
-    let configuration_file_contents = std::fs::read_to_string(&args.configuration_path)
-        .with_context(|| format!("Could not read file \"{}\"", configuration_file_path))?;
-    let configuration: Configuration = serde_json::from_str(&configuration_file_contents)
-        .with_context(|| format!("Could not parse file \"{}\"", configuration_file_path))?;
+    if !config.target_directory.exists() {
+        eprintln!("Destination folder does not exist");
+        exit(1);
+    }
 
-    let organiser = DefaultImageOrganiser {};
-    return organiser.run_with_configuration_file(configuration);
+    let pattern: PathBuf = [
+        config.source_directory.unwrap().to_str().unwrap(),
+        &config.pattern,
+    ]
+    .iter()
+    .collect();
+
+    println!("{}", pattern.to_str().unwrap());
+
+    for entry in glob(&pattern.to_str().unwrap()).expect("Failed to read glob pattern") {
+        match entry {
+            Ok(path) => {
+                println!("{:?}", path);
+                let creation_date = match path.metadata() {
+                    Ok(metadata) => metadata.created().with_context(|| {
+                        format!(
+                            "Could not read creation date of file {}",
+                            path.to_str().unwrap()
+                        )
+                    })?,
+                    Err(_) => continue,
+                };
+
+                let datetime: DateTime<Utc> = creation_date.into();
+                let month_year = datetime.format("%Y-%m").to_string();
+                let new_path = config
+                    .target_directory
+                    .join(month_year)
+                    .join(path.file_name().unwrap());
+                let parent_dir = new_path.parent().unwrap();
+                // fs::create_dir_all(parent_dir).expect("Failed to create directory");
+                // fs::rename(&path, &new_path).expect("Failed to move file");
+            }
+            Err(e) => {
+                eprintln!("{:?}", e);
+                continue;
+            }
+        }
+    }
+
+    Ok(())
 }
