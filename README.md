@@ -5,14 +5,20 @@ Initially I used Swift because that's what I'm most familiar with, but I'm now r
 
 ## Usage
 
-```
-image-organiser <configuration_file>
+```bash
+# To copy the matched files to the TARGET_DIRECTORY
+image-organiser copy <PATTERN> <TARGET_DIRECTORY> [SOURCE_DIRECTORY]
+
+# To move the matched files to the TARGET_DIRECTORY
+image-organiser move <PATTERN> <TARGET_DIRECTORY> [SOURCE_DIRECTORY]
 ```
 
-## Configuration
+The parameters are the same for both the `copy` and `move` commands.
 
-TODO
+- `PATTERN` parameter is a glob pattern that matches the files you want to organise.
+- `TARGET_DIRECTORY` is the directory you want the files to be copied/moved to.
+- `SOURCE_DIRECTORY` is the directory you want to search for files in. If it's not specified, the current directory is used.
 
 ## Progress
 
-10% at most. I just started playing around with Rust and I have very little idea what I'm doing.
+About 60% done. I've got the basic functionality working, but there are a few things I want to add before I'm happy with it.
