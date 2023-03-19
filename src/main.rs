@@ -5,12 +5,14 @@ use std::path::PathBuf;
 use std::process::exit;
 
 mod cli_configuration;
+mod dateformatter;
 mod organiser;
 
 use crate::cli_configuration::cli::CLI;
 use crate::cli_configuration::command_configuration::CommandConfiguration;
 use crate::cli_configuration::file_action::FileAction;
-use crate::organiser::handle_path::handle_path;
+use crate::organiser::default_organiser::DefaultOrganiser;
+use crate::organiser::organiser::Organiser;
 
 fn parse_configuration() -> CommandConfiguration {
     let cli = CLI::parse();
@@ -55,10 +57,12 @@ fn main() -> Result<()> {
 
     println!("{}", pattern.to_str().unwrap());
 
+    let organiser = DefaultOrganiser {};
+
     let glob_pattern = pattern.to_str().unwrap();
     for entry in glob(glob_pattern).expect("Failed to read glob pattern") {
         match entry {
-            Ok(path) => handle_path(path, &configuration)?,
+            Ok(path) => organiser.handle_path(path, &configuration)?,
             Err(e) => {
                 eprintln!("{:?}", e);
                 continue;
