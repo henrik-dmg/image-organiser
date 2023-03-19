@@ -8,8 +8,7 @@ mod dateformatter;
 mod organiser;
 
 use crate::cli::cli::parse_configuration;
-use crate::dateformatter::formatter::DateFormatter;
-use crate::dateformatter::strategy::DateGroupingStragegy;
+use crate::dateformatter::{formatter::DateFormatter, strategy::DateGroupingStragegy};
 use crate::organiser::organiser::Organiser;
 
 fn main() -> Result<()> {
