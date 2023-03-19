@@ -1,4 +1,6 @@
+use crate::cli::action::Action;
 use crate::cli::arguments::Arguments;
+use crate::cli::configuration::Configuration;
 use clap::{Parser, Subcommand};
 
 #[derive(Parser)]
@@ -15,4 +17,34 @@ pub enum CLIAction {
     Copy(Arguments),
     /// Moves the matched files to the target directory
     Move(Arguments),
+}
+
+pub fn parse_configuration() -> Configuration {
+    let cli = CLI::parse();
+
+    let mut configuration: Configuration = match cli.action {
+        CLIAction::Copy(configuration) => Configuration {
+            pattern: configuration.pattern,
+            target_directory: configuration.target_directory,
+            source_directory: configuration.source_directory,
+            action: Action::Copy,
+        },
+        CLIAction::Move(configuration) => Configuration {
+            pattern: configuration.pattern,
+            target_directory: configuration.target_directory,
+            source_directory: configuration.source_directory,
+            action: Action::Move,
+        },
+    };
+
+    if configuration.source_directory.is_none() {
+        match std::env::current_dir() {
+            Ok(path) => configuration.source_directory = Some(path),
+            Err(_) => {
+                panic!("Source directory not specified and could not get current dir");
+            }
+        }
+    }
+
+    configuration
 }
