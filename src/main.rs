@@ -1,5 +1,7 @@
 use anyhow::Result;
 use clap::Parser;
+use cli_configuration::command_configuration::CommandConfiguration;
+use cli_configuration::file_action::FileAction;
 use glob::glob;
 use std::path::PathBuf;
 use std::process::exit;
@@ -8,18 +10,26 @@ mod cli_configuration;
 mod dateformatter;
 mod organiser;
 
-use crate::cli_configuration::cli::CLI;
-use crate::cli_configuration::command_configuration::CommandConfiguration;
-use crate::cli_configuration::file_action::FileAction;
+use crate::cli_configuration::cli::{CLIAction, CLI};
 use crate::organiser::default_organiser::DefaultOrganiser;
 use crate::organiser::organiser::Organiser;
 
 fn parse_configuration() -> CommandConfiguration {
     let cli = CLI::parse();
 
-    let mut configuration = match cli.action {
-        FileAction::Copy(configuration) => configuration,
-        FileAction::Move(configuration) => configuration,
+    let mut configuration: CommandConfiguration = match cli.action {
+        CLIAction::Copy(configuration) => CommandConfiguration {
+            pattern: configuration.pattern,
+            target_directory: configuration.target_directory,
+            source_directory: configuration.source_directory,
+            action: FileAction::Copy,
+        },
+        CLIAction::Move(configuration) => CommandConfiguration {
+            pattern: configuration.pattern,
+            target_directory: configuration.target_directory,
+            source_directory: configuration.source_directory,
+            action: FileAction::Move,
+        },
     };
 
     if configuration.source_directory.is_none() {

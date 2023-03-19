@@ -1,8 +1,10 @@
 use crate::cli_configuration::command_configuration::CommandConfiguration;
+use crate::cli_configuration::file_action::FileAction;
 use crate::dateformatter::formatter::DateFormatter;
 use crate::organiser::organiser::Organiser;
 use anyhow::{Context, Result};
 use chrono::{DateTime, Utc};
+use std::fs;
 use std::path::PathBuf;
 
 pub struct DefaultOrganiser;
@@ -25,7 +27,7 @@ impl Organiser for DefaultOrganiser {
         };
 
         let datetime: DateTime<Utc> = creation_date.into();
-        let month_year = datetime.format("%Y-%m").to_string();
+        let date_string = self.make_folder_name(datetime);
 
         let file_name = path
             .file_name()
@@ -33,7 +35,7 @@ impl Organiser for DefaultOrganiser {
 
         let new_path = configuration
             .target_directory
-            .join(month_year)
+            .join(date_string)
             .join(file_name);
         let parent_dir = new_path.parent().with_context(|| {
             format!(
@@ -42,10 +44,16 @@ impl Organiser for DefaultOrganiser {
             )
         })?;
 
-        let date_string = self.make_folder_name(datetime);
-
-        // fs::create_dir_all(parent_dir).expect("Failed to create directory");
-        // fs::rename(&path, &new_path).expect("Failed to move file");
+        match configuration.action {
+            FileAction::Copy => {
+                fs::create_dir_all(parent_dir).expect("Failed to create directory");
+                fs::copy(&path, &new_path).expect("Failed to copy file");
+            }
+            FileAction::Move => {
+                fs::create_dir_all(parent_dir).expect("Failed to create directory");
+                fs::rename(&path, &new_path).expect("Failed to move file");
+            }
+        }
 
         Ok(())
     }
