@@ -5,14 +5,19 @@ use std::path::PathBuf;
 use std::process::exit;
 
 mod cli_configuration;
-mod file_organiser;
+mod organiser;
 
-fn parse_configuration() -> cli_configuration::CommandConfiguration {
-    let cli = cli_configuration::CLI::parse();
+use crate::cli_configuration::cli::CLI;
+use crate::cli_configuration::command_configuration::CommandConfiguration;
+use crate::cli_configuration::file_action::FileAction;
+use crate::organiser::handle_path::handle_path;
+
+fn parse_configuration() -> CommandConfiguration {
+    let cli = CLI::parse();
 
     let mut configuration = match cli.action {
-        cli_configuration::FileAction::Copy(configuration) => configuration,
-        cli_configuration::FileAction::Move(configuration) => configuration,
+        FileAction::Copy(configuration) => configuration,
+        FileAction::Move(configuration) => configuration,
     };
 
     if configuration.source_directory.is_none() {
@@ -53,7 +58,7 @@ fn main() -> Result<()> {
     let glob_pattern = pattern.to_str().unwrap();
     for entry in glob(glob_pattern).expect("Failed to read glob pattern") {
         match entry {
-            Ok(path) => file_organiser::handle_path(path, &configuration)?,
+            Ok(path) => handle_path(path, &configuration)?,
             Err(e) => {
                 eprintln!("{:?}", e);
                 continue;

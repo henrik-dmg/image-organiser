@@ -1,12 +1,9 @@
-use crate::cli_configuration;
+use crate::cli_configuration::command_configuration::CommandConfiguration;
 use anyhow::{Context, Result};
 use chrono::{DateTime, Utc};
 use std::path::PathBuf;
 
-pub fn handle_path(
-    path: PathBuf,
-    configuration: &cli_configuration::CommandConfiguration,
-) -> Result<()> {
+pub fn handle_path(path: PathBuf, configuration: &CommandConfiguration) -> Result<()> {
     let path_name = path
         .to_str()
         .with_context(|| format!("Could not convert path to string"))?;
