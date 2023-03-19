@@ -1,4 +1,4 @@
-pub enum FileAction {
+pub enum Action {
     Copy,
     Move,
 }

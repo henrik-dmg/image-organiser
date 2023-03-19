@@ -2,7 +2,7 @@ use clap::Args;
 use std::path::PathBuf;
 
 #[derive(Args)]
-pub struct CLIArguments {
+pub struct Arguments {
     /// The glob pattern to match files
     pub pattern: String,
     /// The directory to which files will be copied

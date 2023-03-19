@@ -1,4 +1,4 @@
-use crate::cli_configuration::cli_arguments::CLIArguments;
+use crate::cli::arguments::Arguments;
 use clap::{Parser, Subcommand};
 
 #[derive(Parser)]
@@ -12,7 +12,7 @@ pub struct CLI {
 #[derive(Subcommand)]
 pub enum CLIAction {
     /// Copies the matched files to the target directory
-    Copy(CLIArguments),
+    Copy(Arguments),
     /// Moves the matched files to the target directory
-    Move(CLIArguments),
+    Move(Arguments),
 }

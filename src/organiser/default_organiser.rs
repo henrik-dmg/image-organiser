@@ -1,5 +1,5 @@
-use crate::cli_configuration::command_configuration::CommandConfiguration;
-use crate::cli_configuration::file_action::FileAction;
+use crate::cli::action::Action;
+use crate::cli::configuration::Configuration;
 use crate::dateformatter::formatter::DateFormatter;
 use crate::organiser::organiser::Organiser;
 use anyhow::{Context, Result};
@@ -10,7 +10,7 @@ use std::path::PathBuf;
 pub struct DefaultOrganiser;
 
 impl Organiser for DefaultOrganiser {
-    fn handle_path(&self, path: PathBuf, configuration: &CommandConfiguration) -> Result<()> {
+    fn handle_path(&self, path: PathBuf, configuration: &Configuration) -> Result<()> {
         let path_name = path
             .to_str()
             .with_context(|| format!("Could not convert path to string"))?;
@@ -45,11 +45,11 @@ impl Organiser for DefaultOrganiser {
         })?;
 
         match configuration.action {
-            FileAction::Copy => {
+            Action::Copy => {
                 fs::create_dir_all(parent_dir).expect("Failed to create directory");
                 fs::copy(&path, &new_path).expect("Failed to copy file");
             }
-            FileAction::Move => {
+            Action::Move => {
                 fs::create_dir_all(parent_dir).expect("Failed to create directory");
                 fs::rename(&path, &new_path).expect("Failed to move file");
             }
