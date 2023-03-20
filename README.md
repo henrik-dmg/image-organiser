@@ -9,10 +9,10 @@ Initially I used Swift because that's what I'm most familiar with, but I'm now r
 
 ```bash
 # To copy the matched files to the TARGET_DIRECTORY
-image-organiser copy <PATTERN> <TARGET_DIRECTORY> [SOURCE_DIRECTORY]
+image-organiser copy <PATTERN> <TARGET_DIRECTORY> [SOURCE_DIRECTORY] [STRATEGY]
 
 # To move the matched files to the TARGET_DIRECTORY
-image-organiser move <PATTERN> <TARGET_DIRECTORY> [SOURCE_DIRECTORY]
+image-organiser move <PATTERN> <TARGET_DIRECTORY> [SOURCE_DIRECTORY] [STRATEGY]
 ```
 
 The parameters are the same for both the `copy` and `move` commands.
@@ -20,7 +20,8 @@ The parameters are the same for both the `copy` and `move` commands.
 - `PATTERN` parameter is a glob pattern that matches the files you want to organise.
 - `TARGET_DIRECTORY` is the directory you want the files to be copied/moved to.
 - `SOURCE_DIRECTORY` is the directory you want to search for files in. If it's not specified, the current directory is used.
+- `STRATEGY` is the strategy to use when copying/moving files. If it's not specified, the default `month` is used.
 
 ## Progress
 
-About 60% done. I've got the basic functionality working, but there are a few things I want to add before I'm happy with it.
+About 80% done. I've got the basic functionality working, but there are a few things I want to add before I'm happy with it.

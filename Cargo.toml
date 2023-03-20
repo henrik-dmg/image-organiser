@@ -2,6 +2,14 @@
 name = "image-organiser"
 version = "0.1.0"
 edition = "2021"
+authors = ["Henrik Panhans <henrik@panhans.dev>"]
+license = "MIT"
+description = "A tool to organise images into folders by date"
+readme = "README.md"
+homepage = "https://github.com/henrik-dmg/image-organiser"
+repository = "https://github.com/henrik-dmg/image-organiser"
+keywords = ["cli", "images", "organisation"]
+categories = ["command-line-utilities"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
