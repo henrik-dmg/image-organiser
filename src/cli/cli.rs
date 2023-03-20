@@ -1,6 +1,7 @@
 use crate::cli::action::Action;
 use crate::cli::arguments::Arguments;
 use crate::cli::configuration::Configuration;
+use crate::dateformatter::strategy::DateGroupingStragegy;
 use clap::{Parser, Subcommand};
 
 #[derive(Parser)]
@@ -28,12 +29,18 @@ pub fn parse_configuration() -> Configuration {
             target_directory: configuration.target_directory,
             source_directory: configuration.source_directory,
             action: Action::Copy,
+            strategy: configuration
+                .strategy
+                .unwrap_or(DateGroupingStragegy::Month),
         },
         CLIAction::Move(configuration) => Configuration {
             pattern: configuration.pattern,
             target_directory: configuration.target_directory,
             source_directory: configuration.source_directory,
             action: Action::Move,
+            strategy: configuration
+                .strategy
+                .unwrap_or(DateGroupingStragegy::Month),
         },
     };
 

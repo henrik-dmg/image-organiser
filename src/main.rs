@@ -8,7 +8,7 @@ mod dateformatter;
 mod organiser;
 
 use crate::cli::cli::parse_configuration;
-use crate::dateformatter::{formatter::DateFormatter, strategy::DateGroupingStragegy};
+use crate::dateformatter::formatter::DateFormatter;
 use crate::organiser::organiser::Organiser;
 
 fn main() -> Result<()> {
@@ -34,7 +34,7 @@ fn main() -> Result<()> {
     println!("{}", pattern.to_str().unwrap());
 
     let formatter = DateFormatter {
-        strategy: DateGroupingStragegy::Month,
+        strategy: configuration.strategy.clone(),
     };
     let organiser = Organiser { formatter };
 

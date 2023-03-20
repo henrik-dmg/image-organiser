@@ -1,4 +1,5 @@
 use crate::cli::action::Action;
+use crate::dateformatter::strategy::DateGroupingStragegy;
 use std::path::PathBuf;
 
 pub struct Configuration {
@@ -10,4 +11,6 @@ pub struct Configuration {
     pub source_directory: Option<PathBuf>,
     /// The action to perform on the files
     pub action: Action,
+    /// The strategy to use when organising files
+    pub strategy: DateGroupingStragegy,
 }

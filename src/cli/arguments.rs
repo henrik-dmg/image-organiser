@@ -1,5 +1,7 @@
-use clap::Args;
+use clap::{Args, Parser, Subcommand, ValueEnum};
 use std::path::PathBuf;
+
+use crate::dateformatter::strategy::DateGroupingStragegy;
 
 #[derive(Args)]
 pub struct Arguments {
@@ -12,4 +14,6 @@ pub struct Arguments {
     // /// Turn debugging information on
     // #[arg(short, long, action = clap::ArgAction::Count)]
     // debug: u8,
+    #[arg(value_enum)]
+    pub strategy: Option<DateGroupingStragegy>,
 }

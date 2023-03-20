@@ -10,7 +10,7 @@ impl DateFormatter {
         let date_format = match self.strategy {
             DateGroupingStragegy::Year => "%Y",
             DateGroupingStragegy::Month => "%Y/%m",
-            DateGroupingStragegy::Week => "%Y/%m/%W",
+            DateGroupingStragegy::Week => "%Y/%W",
         };
         return datetime.format(&date_format).to_string();
     }
