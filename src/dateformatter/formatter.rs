@@ -7,9 +7,11 @@ pub struct DateFormatter {
 
 impl DateFormatter {
     pub fn make_folder_name(&self, datetime: DateTime<Utc>) -> String {
-        // TODO: Use strategy here
-        let year = datetime.format("%Y/%m").to_string();
-        println!("{}", year);
-        return year;
+        let date_format = match self.strategy {
+            DateGroupingStragegy::Year => "%Y",
+            DateGroupingStragegy::Month => "%Y/%m",
+            DateGroupingStragegy::Week => "%Y/%m/%W",
+        };
+        return datetime.format(&date_format).to_string();
     }
 }
