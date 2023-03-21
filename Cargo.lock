@@ -230,6 +230,7 @@ dependencies = [
  "chrono",
  "clap",
  "glob",
+ "termcolor",
 ]
 
 [[package]]
