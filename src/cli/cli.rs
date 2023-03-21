@@ -2,6 +2,7 @@ use crate::cli::action::Action;
 use crate::cli::arguments::Arguments;
 use crate::cli::configuration::Configuration;
 use crate::dateformatter::strategy::DateGroupingStragegy;
+use anyhow::{Context, Result};
 use clap::{Parser, Subcommand};
 
 #[derive(Parser)]
@@ -20,7 +21,7 @@ pub enum CLIAction {
     Move(Arguments),
 }
 
-pub fn parse_configuration() -> Configuration {
+pub fn parse_configuration() -> Result<Configuration> {
     let cli = CLI::parse();
 
     let mut configuration: Configuration = match cli.action {
@@ -45,13 +46,9 @@ pub fn parse_configuration() -> Configuration {
     };
 
     if configuration.source_directory.is_none() {
-        match std::env::current_dir() {
-            Ok(path) => configuration.source_directory = Some(path),
-            Err(_) => {
-                panic!("Source directory not specified and could not get current dir");
-            }
-        }
+        let current_dir = std::env::current_dir().context("Failed to get current directory")?;
+        configuration.source_directory = Some(current_dir);
     }
 
-    configuration
+    Ok(configuration)
 }
