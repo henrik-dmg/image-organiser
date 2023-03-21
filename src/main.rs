@@ -17,7 +17,6 @@ fn main() -> Result<()> {
     let configuration = parse_configuration()?;
     let mut printer = Printer::default();
 
-    let action = configuration.action;
     if !configuration.target_directory.exists() {
         eprintln!("Destination folder does not exist");
         exit(1);
@@ -55,7 +54,7 @@ fn main() -> Result<()> {
                     .context("Could not get file name of file")?
                     .to_str()
                     .context("Could not convert file name to string")?;
-                printer.notify_path_handled_successfully(file_name, action)?;
+                printer.notify_path_handled_successfully(file_name, configuration.action)?;
             }
             Err(_) => {
                 printer.notify_path_handling_failed("test")?;
