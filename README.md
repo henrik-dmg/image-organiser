@@ -34,6 +34,8 @@ The parameters are the same for both the `copy` and `move` commands.
 - `SOURCE_DIRECTORY` is the directory you want to search for files in. If it's not specified, the current directory is used.
 - `STRATEGY` is the strategy to use when copying/moving files. If it's not specified, the default `month` is used.
 
+Example: `image-organiser copy "**/*.jpg" /Volumes/MySDCard ~/Pictures week`
+
 ## Progress
 
 About 80% done. I've got the basic functionality working, but there are a few things I want to add before I'm happy with it.
