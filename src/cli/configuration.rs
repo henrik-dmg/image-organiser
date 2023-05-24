@@ -7,8 +7,6 @@ pub struct Configuration {
     pub pattern: String,
     /// The directory to which files will be copied
     pub target_directory: PathBuf,
-    /// The directory from which files are copied
-    pub source_directory: Option<PathBuf>,
     /// The action to perform on the files
     pub action: Action,
     /// The strategy to use when organising files
