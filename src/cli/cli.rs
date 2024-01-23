@@ -1,7 +1,7 @@
 use crate::cli::action::Action;
 use crate::cli::arguments::Arguments;
 use crate::cli::configuration::Configuration;
-use crate::dateformatter::strategy::DateGroupingStragegy;
+use crate::dateformatter::strategy::DateGroupingStrategy;
 use anyhow::Result;
 use clap::{Parser, Subcommand};
 
@@ -26,20 +26,20 @@ pub fn parse_configuration() -> Result<Configuration> {
 
     let configuration = match cli.action {
         CLIAction::Copy(configuration) => Configuration {
-            pattern: configuration.pattern,
             target_directory: configuration.target_directory,
+            pattern: configuration.pattern,
             action: Action::Copy,
             strategy: configuration
                 .strategy
-                .unwrap_or(DateGroupingStragegy::Month),
+                .unwrap_or(DateGroupingStrategy::Month),
         },
         CLIAction::Move(configuration) => Configuration {
-            pattern: configuration.pattern,
             target_directory: configuration.target_directory,
+            pattern: configuration.pattern,
             action: Action::Move,
             strategy: configuration
                 .strategy
-                .unwrap_or(DateGroupingStragegy::Month),
+                .unwrap_or(DateGroupingStrategy::Month),
         },
     };
 

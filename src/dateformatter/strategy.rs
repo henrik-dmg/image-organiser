@@ -1,7 +1,7 @@
 use clap::ValueEnum;
 
 #[derive(ValueEnum, Clone)]
-pub enum DateGroupingStragegy {
+pub enum DateGroupingStrategy {
     Year,
     Month,
     Week,
