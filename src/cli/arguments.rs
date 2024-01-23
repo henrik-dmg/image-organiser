@@ -1,17 +1,15 @@
 use clap::Args;
 use std::path::PathBuf;
 
-use crate::dateformatter::strategy::DateGroupingStragegy;
+use crate::dateformatter::strategy::DateGroupingStrategy;
 
 #[derive(Args)]
 pub struct Arguments {
+    /// The directory to which files will be copied or moved
+    pub target_directory: PathBuf,
     /// The glob pattern to match files
     pub pattern: String,
-    /// The directory to which files will be copied
-    pub target_directory: PathBuf,
-    // /// Turn debugging information on
-    // #[arg(short, long, action = clap::ArgAction::Count)]
-    // debug: u8,
+    /// The grouping strategy to use
     #[arg(value_enum)]
-    pub strategy: Option<DateGroupingStragegy>,
+    pub strategy: Option<DateGroupingStrategy>,
 }
